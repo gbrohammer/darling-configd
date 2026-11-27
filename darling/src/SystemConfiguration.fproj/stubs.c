@@ -49,6 +49,19 @@ CFStringRef SCNetworkInterfaceGetInterfaceType(SCNetworkInterfaceRef interface)
     return NULL;
 }
 
+// SCNetworkInterfaceCopyAll() lists no interfaces, so there is none to give a name or address for.
+CFStringRef SCNetworkInterfaceGetBSDName(SCNetworkInterfaceRef interface)
+{
+    STUB();
+    return NULL;
+}
+
+CFStringRef SCNetworkInterfaceGetHardwareAddressString(SCNetworkInterfaceRef interface)
+{
+    STUB();
+    return NULL;
+}
+
 SCNetworkServiceRef SCNetworkServiceCopy(SCPreferencesRef prefs, CFStringRef serviceID)
 {
     STUB();
