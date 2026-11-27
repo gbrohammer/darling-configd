@@ -62,6 +62,39 @@ CFStringRef SCNetworkInterfaceGetHardwareAddressString(SCNetworkInterfaceRef int
     return NULL;
 }
 
+// Darling has no network services, as it has no network interfaces
+// (SCNetworkInterfaceCopyAll lists none): the list is empty, and no service object is
+// ever made. The type is registered so that SCNetworkServiceGetTypeID gives a real id.
+static const CFRuntimeClass serviceClass = {
+	.version = 0,
+	.className = "SCNetworkService",
+};
+
+static CFTypeID serviceTypeID = _kCFRuntimeNotATypeID;
+
+static void serviceRegisterClass(void* unused)
+{
+	serviceTypeID = _CFRuntimeRegisterClass(&serviceClass);
+}
+
+CFTypeID SCNetworkServiceGetTypeID(void)
+{
+	static dispatch_once_t once;
+
+	dispatch_once_f(&once, NULL, serviceRegisterClass);
+	return serviceTypeID;
+}
+
+CFArrayRef SCNetworkServiceCopyAll(SCPreferencesRef prefs)
+{
+	return CFArrayCreate(kCFAllocatorDefault, NULL, 0, &kCFTypeArrayCallBacks);
+}
+
+CFStringRef SCNetworkServiceGetServiceID(SCNetworkServiceRef service)
+{
+	return NULL;
+}
+
 SCNetworkServiceRef SCNetworkServiceCopy(SCPreferencesRef prefs, CFStringRef serviceID)
 {
     STUB();
